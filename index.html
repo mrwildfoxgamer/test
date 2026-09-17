@@ -1,0 +1,234 @@
+<html>
+<body>
+<pre>
+===== KNN_iris.ipynb =====
+
+import pandas as pd
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import LabelEncoder,StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score,confusion_matrix,classification_report
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as pit
+
+file_path="C:/Users/KH.EN.U4BCA24231/Documents/ML/iris.csv"
+data=pd.read_csv(file_path)
+print("Original Dataset")
+print(data.head())
+
+encoder= LabelEncoder()
+data["species"] = encoder.fit_transform(data["species"])
+print("\nEncoded Labels")
+print(data.head())
+
+x=data.drop(columns=["species"])
+y=data["species"]
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+print("\nTraining Samples :",len(x_train))
+print("\nTesting Samples :",len(x_test))
+print("\nPreprocessing Completed Successfully!")
+
+scalar=StandardScaler()
+x_train_scalar=scalar.fit_transform(x_train)
+x_test_scaled=scalar.transform(x_test)
+print("\nScaled Features(first 5 rows)")
+print(x_train_scalar[:5])
+
+knn=KNeighborsClassifier(n_neighbors=3)
+knn.fit(x_train_scalar,y_train)
+y_pred=knn.predict(x_test_scaled)
+
+print("\nAccuracy",accuracy_score(y_test,y_pred))
+print("\nConfusion Matrix")
+print(confusion_matrix(y_test,y_pred))
+print("\nClassification Report")
+print(classification_report(y_test,y_pred))
+
+sample=[[5.1,3.5,1.4,0.2]]
+sample_scaled=scalar.transform(sample)
+prediction=knn.predict(sample_scaled)
+print("\nPredicted Species",prediction)
+
+
+===== decision_tree.ipynb =====
+
+import pandas as pd
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import LabelEncoder,StandardScaler
+from sklearn.tree import DecisionTreeClassifier,plot_tree
+from sklearn.metrics import accuracy_score,confusion_matrix,classification_report
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+
+file_path="C:/Users/KH.EN.U4BCA24231/Documents/ML/iris.csv"
+data=pd.read_csv(file_path)
+print("Original Dataset")
+print(data.head())
+
+encoder= LabelEncoder()
+data["species"] = encoder.fit_transform(data["species"])
+print("\nEncoded Labels")
+print(data.head())
+
+x=data.drop(columns=["species"])
+y=data["species"]
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+print("\nTraining Samples :",len(x_train))
+print("\nTesting Samples :",len(x_test))
+print("\nPreprocessing Completed Successfully!")
+
+scalar=StandardScaler()
+x_train_scalar=scalar.fit_transform(x_train)
+x_test_scaled=scalar.transform(x_test)
+print("\nScaled Features(first 5 rows)")
+print(x_train_scalar[:5])
+
+dt=DecisionTreeClassifier(criterion="entropy",max_depth=3,random_state=42)
+
+dt.fit(x_train_scalar,y_train)
+
+y_pred=dt.predict(x_test_scaled)
+
+print("\nAccuracy",accuracy_score(y_test,y_pred))
+print("\nConfusion Matrix")
+print(confusion_matrix(y_test,y_pred))
+print("\nClassification Report")
+print(classification_report(y_test,y_pred))
+
+plt.Figure(figsize=(14,8))
+plot_tree(dt,feature_names=x.columns,class_names=encoder.classes_,filled=True,rounded=True)
+plt.title("Decision Tree for Iris Classification")
+plt.show()
+
+sample = [[5.1, 3.5, 1.4, 0.2]]
+sample_scaled = scalar.transform(sample)
+prediction = dt.predict(sample_scaled)
+print("Predicted:",prediction)
+
+
+===== logistic_regression.ipynb =====
+
+import pandas as pd
+from sklearn.impute import SimpleImputer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder,StandardScaler
+
+path_file="C:/Users/Gopika Sunil/OneDrive/Documents/ml/Titanic-Dataset.csv"
+data=pd.read_csv(path_file)
+print(data.head())
+
+print(data.isnull().sum())
+
+data=data.drop(columns=["PassengerId","Name","Ticket","Cabin"])
+
+print(data.isnull().sum())
+
+age_imputer=SimpleImputer(strategy="mean")
+data["Age"]=age_imputer.fit_transform(data[["Age"]])
+embarked_imputer=SimpleImputer(strategy="most_frequent")
+data["Embarked"]=embarked_imputer.fit_transform(data[["Embarked"]]).ravel()
+
+print(data.isnull().sum())
+
+print(data.head())
+
+encoder=LabelEncoder()
+data["Sex"]=encoder.fit_transform(data["Sex"])
+data["Embarked"]=encoder.fit_transform(data["Embarked"])
+print(data.head())
+
+x=data.drop("Survived",axis=1)
+y=data["Survived"]
+
+scalar=StandardScaler()
+x_scaled=scalar.fit_transform(x)
+
+print(data.isnull().sum())
+
+x_train,x_test,y_train,y_test=train_test_split(x_scaled,y,test_size=0.2,random_state=42)
+print("\nTraining Sample",len(x_train))
+print("\nTesting Sample",len(x_test))
+print("\nPreprocessing Completed Successfully!!")
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score,confusion_matrix,classification_report
+
+model=LogisticRegression(random_state=42)
+model.fit(x_train,y_train)
+
+y_pred=model.predict(x_test)
+
+accuracy=accuracy_score(y_test,y_pred)
+print("accuracy",round(accuracy*100,2),"%")
+print("confusion matyrix",confusion_matrix(y_test,y_pred))
+print("classification_report",classification_report(y_test,y_pred))
+
+new_passenger=[[3,1,25,0,0,7.25,2]]
+new_passenger_scaled=scalar.transform(new_passenger)
+prediction=model.predict(new_passenger_scaled)
+print(prediction)
+if prediction[0]==1:
+    print("\nPassenger is predicted to SURVIVE")
+else:
+    print("\nPassenger is predicted NOT to SURVIVE")
+
+
+===== datapreprocessing_linearegression_-_Copy.ipynb =====
+
+import pandas as pd
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import LabelEncoder,StandardScaler
+from sklearn.model_selection import train_test_split
+import numpy as np
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
+file_path="C:/Users/KH.EN.U4BCA24231/Documents/ML/Company_data.csv"
+data=pd.read_csv(file_path)
+print("Original Dataset")
+print(data.head())
+
+print(data.info())
+
+print(data.describe())
+
+print(data.head())
+
+print(data.isnull().sum())
+
+x=data[['TV','Radio','Newspaper']]
+y=data['Sales']
+
+y.shape
+
+scalar=StandardScaler()
+x_scaled=scalar.fit_transform(x)
+
+x_train,x_test,y_train,y_test=train_test_split(x,y,train_size=0.7,test_size=0.3,random_state=100)
+
+from sklearn.linear_model import LinearRegression
+
+mlr=LinearRegression()
+mlr.fit(x_train,y_train)
+
+print("intercept: ",mlr.intercept_)
+print("coefficient")
+list(zip(x,mlr.coef_))
+
+y_pred=mlr.predict(x_test)
+print("Predicted for test set:{}".format(y_pred))
+
+print("MAE:",round(mean_absolute_error(y_test,y_pred),2))
+print("MSE:",round(mean_squared_error(y_test,y_pred),2))
+print("RMSE:",round(np.sqrt(mean_squared_error(y_test,y_pred)),2))
+print("R2 Score:",round(r2_score(y_test,y_pred),2))
+
+new_data=[[26.3,34.5,56.7]]
+new_data_scaled=scalar.transform(new_data)
+prediction=mlr.predict(new_data_scaled)
+print("prediction sales:",prediction)
+
+</pre>
+</body>
+</html>

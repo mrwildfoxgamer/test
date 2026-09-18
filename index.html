@@ -1,233 +1,265 @@
 <html>
 <body>
 <pre>
-===== KNN_iris.ipynb =====
+===== Array_Binary_tee.c (fixed) =====
 
-import pandas as pd
-from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import LabelEncoder,StandardScaler
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import accuracy_score,confusion_matrix,classification_report
-from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as pit
-
-file_path="C:/Users/KH.EN.U4BCA24231/Documents/ML/iris.csv"
-data=pd.read_csv(file_path)
-print("Original Dataset")
-print(data.head())
-
-encoder= LabelEncoder()
-data["species"] = encoder.fit_transform(data["species"])
-print("\nEncoded Labels")
-print(data.head())
-
-x=data.drop(columns=["species"])
-y=data["species"]
-
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
-print("\nTraining Samples :",len(x_train))
-print("\nTesting Samples :",len(x_test))
-print("\nPreprocessing Completed Successfully!")
-
-scalar=StandardScaler()
-x_train_scalar=scalar.fit_transform(x_train)
-x_test_scaled=scalar.transform(x_test)
-print("\nScaled Features(first 5 rows)")
-print(x_train_scalar[:5])
-
-knn=KNeighborsClassifier(n_neighbors=3)
-knn.fit(x_train_scalar,y_train)
-y_pred=knn.predict(x_test_scaled)
-
-print("\nAccuracy",accuracy_score(y_test,y_pred))
-print("\nConfusion Matrix")
-print(confusion_matrix(y_test,y_pred))
-print("\nClassification Report")
-print(classification_report(y_test,y_pred))
-
-sample=[[5.1,3.5,1.4,0.2]]
-sample_scaled=scalar.transform(sample)
-prediction=knn.predict(sample_scaled)
-print("\nPredicted Species",prediction)
+#include&lt;stdio.h&gt;
+int main(){
+int n;
+printf("Enter number of nodes:");
+scanf("%d",&amp;n);
+int tree[n];
+printf("Enter Node Values:");
+for(int i = 0;i&lt;n;i++){
+scanf("%d",&amp;tree[i]);
+}
+printf("\n Binary Tree Representation");
+for(int i = 0; i&lt;n;i++){
+printf("\n Node = %d",tree[i]);
+if(2*i+1 &lt; n)
+printf("\n Left Child = %d",tree[2*i+1]);
+else
+printf("\n Left Child = NULL");
+if(2*i+2&lt;n)
+printf("\n Right Child = %d",tree[2*i+2]);
+else
+printf("\n Right Child = NULL");
+printf("\n");
+}
+return 0;
+}
 
 
-===== decision_tree.ipynb =====
+===== binnaryLinkedList.c (fixed) =====
 
-import pandas as pd
-from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import LabelEncoder,StandardScaler
-from sklearn.tree import DecisionTreeClassifier,plot_tree
-from sklearn.metrics import accuracy_score,confusion_matrix,classification_report
-from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
 
-file_path="C:/Users/KH.EN.U4BCA24231/Documents/ML/iris.csv"
-data=pd.read_csv(file_path)
-print("Original Dataset")
-print(data.head())
+struct Node {
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
 
-encoder= LabelEncoder()
-data["species"] = encoder.fit_transform(data["species"])
-print("\nEncoded Labels")
-print(data.head())
+int main() {
+    struct Node *root, *left, *right;
 
-x=data.drop(columns=["species"])
-y=data["species"]
+    root = malloc(sizeof(struct Node));
+    left = malloc(sizeof(struct Node));
+    right = malloc(sizeof(struct Node));
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
-print("\nTraining Samples :",len(x_train))
-print("\nTesting Samples :",len(x_test))
-print("\nPreprocessing Completed Successfully!")
+    printf("Enter root value: ");
+    scanf("%d", &amp;root-&gt;data);
 
-scalar=StandardScaler()
-x_train_scalar=scalar.fit_transform(x_train)
-x_test_scaled=scalar.transform(x_test)
-print("\nScaled Features(first 5 rows)")
-print(x_train_scalar[:5])
+    printf("Enter left value: ");
+    scanf("%d", &amp;left-&gt;data);
 
-dt=DecisionTreeClassifier(criterion="entropy",max_depth=3,random_state=42)
+    printf("Enter right value: ");
+    scanf("%d", &amp;right-&gt;data);
 
-dt.fit(x_train_scalar,y_train)
+    root-&gt;left = left;
+    root-&gt;right = right;
 
-y_pred=dt.predict(x_test_scaled)
+    left-&gt;left = NULL;
+    left-&gt;right = NULL;
 
-print("\nAccuracy",accuracy_score(y_test,y_pred))
-print("\nConfusion Matrix")
-print(confusion_matrix(y_test,y_pred))
-print("\nClassification Report")
-print(classification_report(y_test,y_pred))
+    right-&gt;left = NULL;
+    right-&gt;right = NULL;
 
-plt.Figure(figsize=(14,8))
-plot_tree(dt,feature_names=x.columns,class_names=encoder.classes_,filled=True,rounded=True)
-plt.title("Decision Tree for Iris Classification")
-plt.show()
+    printf("\nBinary Tree:\n");
+    printf("Root: %d\n", root-&gt;data);
+    printf("Left: %d\n", root-&gt;left-&gt;data);
+    printf("Right: %d\n", root-&gt;right-&gt;data);
 
-sample = [[5.1, 3.5, 1.4, 0.2]]
-sample_scaled = scalar.transform(sample)
-prediction = dt.predict(sample_scaled)
-print("Predicted:",prediction)
+    free(left);
+    free(right);
+    free(root);
+
+    return 0;
+}
 
 
-===== logistic_regression.ipynb =====
+===== trie_1.c (fixed) =====
 
-import pandas as pd
-from sklearn.impute import SimpleImputer
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder,StandardScaler
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define SIZE 26
+struct TrieNode{
+struct TrieNode *children[SIZE];   
+int isEndOfWord;};
+struct TrieNode *createNode(){ 
+struct TrieNode *newNode; 
+int i;  
+newNode = (struct TrieNode *)malloc(sizeof(struct TrieNode));    
+newNode-&gt;isEndOfWord = 0; 
+for(i = 0; i &lt; SIZE; i++)       
+newNode-&gt;children[i] = NULL;    
+return newNode;}
+void insert(struct TrieNode *root, char word[]){ 
+struct TrieNode *current = root;   
+int index, i;
+for(i = 0; word[i] != '\0'; i++){    
+index = word[i] - 'a';      
+if(current-&gt;children[index] == NULL){      
+current-&gt;children[index] = createNode();       
+}     
+current = current-&gt;children[index];    
+}    
+current-&gt;isEndOfWord = 1;}
+void display(struct TrieNode *root, char word[], int level){  
+int i;
+if(root == NULL)      
+return;  
+if(root-&gt;isEndOfWord){    
+word[level] = '\0';        
+printf("%s\n", word);    
+} 
+for(i = 0; i &lt; SIZE; i++){    
+if(root-&gt;children[i] != NULL){ 
+word[level] = i + 'a';           
+display(root-&gt;children[i], word, level + 1);        
+}}}
+void freeTrie(struct TrieNode *root){
+int i;
+if(root == NULL)
+return;
+for(i = 0; i &lt; SIZE; i++)
+freeTrie(root-&gt;children[i]);
+free(root);}
+int main(){   
+struct TrieNode *root;  
+char word[20];   
+char displayWord[20];
+int n, i;   
+root = createNode();
+printf("Enter number of words: "); 
+scanf("%d", &amp;n);    
+printf("Enter words (lowercase only):\n"); 
+for(i = 0; i &lt; n; i++){ 
+scanf("%s", word);       
+insert(root, word);}
+printf("\nWords stored in Trie are:\n"); 
+display(root, displayWord, 0); 
+freeTrie(root);
+return 0;
+}
 
-path_file="C:/Users/Gopika Sunil/OneDrive/Documents/ml/Titanic-Dataset.csv"
-data=pd.read_csv(path_file)
-print(data.head())
 
-print(data.isnull().sum())
+===== malloc_1.c (fixed) =====
 
-data=data.drop(columns=["PassengerId","Name","Ticket","Cabin"])
-
-print(data.isnull().sum())
-
-age_imputer=SimpleImputer(strategy="mean")
-data["Age"]=age_imputer.fit_transform(data[["Age"]])
-embarked_imputer=SimpleImputer(strategy="most_frequent")
-data["Embarked"]=embarked_imputer.fit_transform(data[["Embarked"]]).ravel()
-
-print(data.isnull().sum())
-
-print(data.head())
-
-encoder=LabelEncoder()
-data["Sex"]=encoder.fit_transform(data["Sex"])
-data["Embarked"]=encoder.fit_transform(data["Embarked"])
-print(data.head())
-
-x=data.drop("Survived",axis=1)
-y=data["Survived"]
-
-scalar=StandardScaler()
-x_scaled=scalar.fit_transform(x)
-
-print(data.isnull().sum())
-
-x_train,x_test,y_train,y_test=train_test_split(x_scaled,y,test_size=0.2,random_state=42)
-print("\nTraining Sample",len(x_train))
-print("\nTesting Sample",len(x_test))
-print("\nPreprocessing Completed Successfully!!")
-
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score,confusion_matrix,classification_report
-
-model=LogisticRegression(random_state=42)
-model.fit(x_train,y_train)
-
-y_pred=model.predict(x_test)
-
-accuracy=accuracy_score(y_test,y_pred)
-print("accuracy",round(accuracy*100,2),"%")
-print("confusion matyrix",confusion_matrix(y_test,y_pred))
-print("classification_report",classification_report(y_test,y_pred))
-
-new_passenger=[[3,1,25,0,0,7.25,2]]
-new_passenger_scaled=scalar.transform(new_passenger)
-prediction=model.predict(new_passenger_scaled)
-print(prediction)
-if prediction[0]==1:
-    print("\nPassenger is predicted to SURVIVE")
-else:
-    print("\nPassenger is predicted NOT to SURVIVE")
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+int main(){
+int *ptr;
+int size;
+printf("Enter Size:");
+scanf("%d",&amp;size);
+ptr = (int*)malloc(size *sizeof(int));
+if(ptr == NULL){
+printf("Memory Not Allocated\n");
+}
+else{
+printf("Memory allocated successfully\n");
+for(int j =0 ; j&lt;size; j++){
+ptr[j] = j+1;
+}
+printf("Elements of Array are:\n");
+for(int k = 0; k&lt;size ; k++){
+printf("%d\n", ptr[k]);
+}
+free(ptr);
+}
+return 0;
+}
 
 
-===== datapreprocessing_linearegression_-_Copy.ipynb =====
+===== calloc_1.c (fixed) =====
 
-import pandas as pd
-from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import LabelEncoder,StandardScaler
-from sklearn.model_selection import train_test_split
-import numpy as np
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+int main(){
+int *ptr;
+int size = 5;
+ptr = (int*)calloc(size,sizeof(int));
+if(ptr == NULL){
+printf("Memory Not Allocated\n");
+return 1;
+}
+else{
+printf("Memory allocated successfully\n");
+for(int j =0 ; j&lt;size; j++){
+ptr[j] = j+1;
+}
+printf("Elements of Array are:\n");
+for(int k = 0; k&lt;size ; k++){
+printf("%d\n", ptr[k]);
+}   
+}
+printf("\n");
+size = 10;
+int *temp = realloc(ptr,size * sizeof(int));
+if(temp == NULL){
+printf("Memory Reallocation failed");
+free(ptr);
+}
+else{
+ptr = temp;
+printf("Memory successfully reallocated");
+for(int j = 5;j&lt;size;j++){
+ptr[j] = j+1;
+}
+for(int k = 0;k&lt;size; k++){
+printf("%d",ptr[k]);
+}
+free(ptr);
+}
+return 0;
+}
 
-file_path="C:/Users/KH.EN.U4BCA24231/Documents/ML/Company_data.csv"
-data=pd.read_csv(file_path)
-print("Original Dataset")
-print(data.head())
 
-print(data.info())
+===== realloc_1.c (fixed) =====
 
-print(data.describe())
-
-print(data.head())
-
-print(data.isnull().sum())
-
-x=data[['TV','Radio','Newspaper']]
-y=data['Sales']
-
-y.shape
-
-scalar=StandardScaler()
-x_scaled=scalar.fit_transform(x)
-
-x_train,x_test,y_train,y_test=train_test_split(x,y,train_size=0.7,test_size=0.3,random_state=100)
-
-from sklearn.linear_model import LinearRegression
-
-mlr=LinearRegression()
-mlr.fit(x_train,y_train)
-
-print("intercept: ",mlr.intercept_)
-print("coefficient")
-list(zip(x,mlr.coef_))
-
-y_pred=mlr.predict(x_test)
-print("Predicted for test set:{}".format(y_pred))
-
-print("MAE:",round(mean_absolute_error(y_test,y_pred),2))
-print("MSE:",round(mean_squared_error(y_test,y_pred),2))
-print("RMSE:",round(np.sqrt(mean_squared_error(y_test,y_pred)),2))
-print("R2 Score:",round(r2_score(y_test,y_pred),2))
-
-new_data=[[26.3,34.5,56.7]]
-new_data_scaled=scalar.transform(new_data)
-prediction=mlr.predict(new_data_scaled)
-print("prediction sales:",prediction)
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+int main(){
+int *ptr;
+int size = 5;
+ptr = (int*)calloc(size,sizeof(int));
+if(ptr == NULL){
+printf("Memory Not Allocated\n");
+return 1;
+}
+else{
+printf("Memory allocated successfully\n");
+for(int j =0 ; j&lt;size; j++){
+ptr[j] = j+1;
+}
+printf("Elements of Array are:\n");
+for(int k = 0; k&lt;size ; k++){
+printf("%d\n", ptr[k]);
+}   
+}
+printf("\n");
+size = 10;
+int *temp = realloc(ptr,size * sizeof(int));
+if(temp == NULL){
+printf("Memory Reallocation failed");
+free(ptr);
+}
+else{
+ptr = temp;
+printf("Memory successfully reallocated");
+for(int j = 5;j&lt;size;j++){
+ptr[j] = j+1;
+}
+for(int k = 0;k&lt;size; k++){
+printf(" %d ",ptr[k]);
+}
+free(ptr);
+}
+printf("\n");
+return 0;
+}
 
 </pre>
 </body>
